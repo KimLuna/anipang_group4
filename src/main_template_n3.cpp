@@ -15,31 +15,6 @@ const string EMPTY = "  ";
 const int INITIAL_MOVES = 30;
 const int MIN_MATCH = 3;
 
-extern "C" void runPerformanceTests(std::ostream &logStream)
-{
-    const int ITER = 100;
-
-    AnipangGame game;
-
-    // Time: hasValidMoves
-    auto start1 = chrono::high_resolution_clock::now();
-    for (int i = 0; i < ITER; i++)
-        game.hasValidMoves();
-    auto end1 = chrono::high_resolution_clock::now();
-    auto dur1 = chrono::duration_cast<chrono::microseconds>(end1 - start1).count() / ITER;
-
-    logStream << "hasValidMoves avg time: " << dur1 << " μs" << endl;
-
-    // Time: dropBlocks
-    auto start2 = chrono::high_resolution_clock::now();
-    for (int i = 0; i < ITER; i++)
-        game.dropBlocks(); // or setup test case
-    auto end2 = chrono::high_resolution_clock::now();
-    auto dur2 = chrono::duration_cast<chrono::microseconds>(end2 - start2).count() / ITER;
-
-    logStream << "dropBlocks avg time: " << dur2 << " μs" << endl;
-}
-
 class AnipangGame
 {
 private:
@@ -319,6 +294,7 @@ public:
 };
 
 // ===== Main =====
+#ifndef UNIT_TEST
 int main()
 {
     AnipangGame game;
@@ -358,3 +334,4 @@ int main()
     cout << "Final Score: " << game.getScore() << endl;
     return 0;
 }
+#endif

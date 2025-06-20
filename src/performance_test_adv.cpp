@@ -7,7 +7,7 @@
 #include <sys/resource.h>
 #include <functional>
 #define UNIT_TEST
-#include "main_template_n3.cpp"
+#include "main_template_n8.cpp"
 
 using namespace std;
 using namespace chrono;
@@ -24,13 +24,6 @@ long getMemoryUsageKB() {
     return usage.ru_maxrss;
 }
 
-long getPeakMemoryDuring(function<void()> func) {
-    long before = getMemoryUsageKB();
-    func();  // 함수 실행
-    long after = getMemoryUsageKB();
-    return after - before;
-}
-
 // 성능 측정 도우미
 double measureTimeMs(function<void()> func, int iterations = 1000) {
     double total = 0;
@@ -40,12 +33,12 @@ double measureTimeMs(function<void()> func, int iterations = 1000) {
         auto end = high_resolution_clock::now();
         total += duration_cast<nanoseconds>(end - start).count();
     }
-    return total / iterations / 1'000'000.0;  // ns -> ms
+    return total / iterations / 1'000'000.0;  // ns → ms
 }
 
-// 테스트용 보드 수동 설정 함수
-void setBlock(AnipangGame& game, int row, int col, const string& val) {
-    string (*board)[7][7] = (string(*)[7][7]) &game;
+// enum 기반 보드 수정 함수
+void setBlock(AnipangGame& game, int row, int col, Animal val) {
+    Animal (*board)[7][7] = (Animal(*)[7][7]) &game;
     (*board)[row][col] = val;
 }
 
@@ -57,26 +50,24 @@ PerfResult testHasValidMoves() {
 
 PerfResult testDropBlocks() {
     AnipangGame game;
-    setBlock(game, 6, 0, "  ");
-    setBlock(game, 5, 0, "  ");
-
+    setBlock(game, 6, 0, EMPTY);
+    setBlock(game, 5, 0, EMPTY);
     double avg = measureTimeMs([&]() { game.dropBlocks(); }, 1000);
     return {"dropBlocks()", avg};
 }
 
 PerfResult testCountConnectedAnimals() {
     AnipangGame game;
-    setBlock(game, 0, 0, "🐶");
-    setBlock(game, 0, 1, "🐶");
-    setBlock(game, 0, 2, "🐶");
-    setBlock(game, 1, 0, "🐶");
+    setBlock(game, 0, 0, DOG);
+    setBlock(game, 0, 1, DOG);
+    setBlock(game, 1, 0, DOG);
 
     double total = 0;
     const int iterations = 1000;
     for (int i = 0; i < iterations; ++i) {
         bool visited[7][7] = {};
         auto start = high_resolution_clock::now();
-        game.countConnectedAnimals(0, 0, "🐶", visited);
+        game.countConnectedAnimals(0, 0, DOG, visited);
         auto end = high_resolution_clock::now();
         total += duration_cast<nanoseconds>(end - start).count();
     }
@@ -90,7 +81,7 @@ long testMemoryUsage() {
 
 int main() {
     vector<PerfResult> results;
-    cout << "=== Anipang Original Performance Test ===" << endl;
+    cout << "=== Anipang Advanced Performance Test ===" << endl;
 
     results.push_back(testHasValidMoves());
     results.push_back(testDropBlocks());
@@ -104,8 +95,8 @@ int main() {
     }
     cout << "Memory Usage (RSS): " << memUsage << " KB" << endl;
 
-    ofstream out("benchmark_results.txt", ios::app);
-    out << "\n# Anipang Performance Benchmark (Original)\n";
+    ofstream out("benchmark_results_adv.txt",ios::app);
+    out << "# Anipang Performance Benchmark (Enum-Based Version)\n";
     for (const auto& res : results) {
         out << res.name << ": " << res.avgTimeMs << " ms\n";
     }

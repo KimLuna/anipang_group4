@@ -81,7 +81,7 @@ Your `IMPLEMENTATION_NOTES` must explain:
 ```cpp
 // Your optimized code snippet
 ```
-```
+
 
 ### 2. Algorithm Optimizations
 - Explain each major algorithmic improvement

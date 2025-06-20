@@ -1,3 +1,0 @@
-=== Performance Results for n1 ===
-            Function |  Avg Time (μs) |  Min Time (μs) |  Max Time (μs)
-----------------------------------------------------------------------

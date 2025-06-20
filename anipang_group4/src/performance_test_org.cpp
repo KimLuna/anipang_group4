@@ -7,7 +7,7 @@
 #include <sys/resource.h>
 #include <functional>
 #define UNIT_TEST
-#include "main_template_n3.cpp"
+#include "main_optimized.cpp"
 
 using namespace std;
 using namespace chrono;
