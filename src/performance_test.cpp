@@ -9,7 +9,7 @@
 #include <sys/resource.h>
 #include <functional>
 #define UNIT_TEST
-#include "main_template_n8.cpp"
+#include "main_optimized.cpp"
 
 using namespace std;
 using namespace chrono;
@@ -97,7 +97,7 @@ int main() {
     }
     cout << "Memory Usage (RSS): " << memUsage << " KB" << endl;
 
-    ofstream out("benchmark_results_adv.txt",ios::app);
+    ofstream out("./data/benchmark_results_adv.txt",ios::app);
     out << "# Anipang Performance Benchmark (Enum-Based Version)\n";
     for (const auto& res : results) {
         out << res.name << ": " << res.avgTimeMs << " ms\n";

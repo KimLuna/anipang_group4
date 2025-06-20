@@ -1,12 +1,14 @@
-CXX = clang++
+CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+
+SRC_DIR = src
 
 all: performance_test
 
-performance_test: performance_test.cpp
+performance_test: $(SRC_DIR)/performance_test.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
-	rm -f performance_test benchmark_results_*.txt
+	rm -f performance_test performance_test_org ./data/benchmark_results_adv.txt
 
-.PHONY: all clean 
+.PHONY: all clean org
